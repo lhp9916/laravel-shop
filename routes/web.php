@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         //收货地址
         Route::get('user_address', 'UserAddressesController@index')->name('user_address.index');
+        Route::get('user_address/create', 'UserAddressesController@create')->name('user_address.create');
 
     });
 });
