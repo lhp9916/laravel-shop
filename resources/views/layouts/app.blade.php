@@ -19,6 +19,7 @@
     </div>
     @include('layouts._footer')
     <script src="{{ mix('js/app.js') }}"></script>
+    @yield('scriptsAfterJs')
 </div>
 </body>
 </html>
