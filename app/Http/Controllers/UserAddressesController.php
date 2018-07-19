@@ -36,11 +36,15 @@ class UserAddressesController extends Controller
 
     public function edit(UserAddress $userAddress)
     {
+        $this->authorize('own', $userAddress);
+
         return view('user_address.create_and_edit', ['address' => $userAddress]);
     }
 
     public function update(UserAddress $user_address, UserAddressRequest $request)
     {
+        $this->authorize('own', $user_address);
+
         $user_address->update($request->only([
             'province',
             'city',
@@ -56,6 +60,8 @@ class UserAddressesController extends Controller
 
     public function destroy(UserAddress $user_address)
     {
+        $this->authorize('own', $user_address);
+
         $user_address->delete();
 
         return [];
