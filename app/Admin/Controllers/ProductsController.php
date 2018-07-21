@@ -39,8 +39,7 @@ class ProductsController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('编辑商品');
 
             $content->body($this->form()->edit($id));
         });
@@ -55,8 +54,7 @@ class ProductsController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('创建商品');
 
             $content->body($this->form());
         });
@@ -101,12 +99,26 @@ class ProductsController extends Controller
      */
     protected function form()
     {
+        //创建一个表单
         return Admin::form(Product::class, function (Form $form) {
+            // 创建一个输入框，第一个参数 title 是模型的字段名，第二个参数是该字段描述
+            $form->text('title', '商品名称')->rules('required');
+            $form->image('image', '封面照片')->rules('required|image');
+            //富文本编辑器
+            $form->editor('description', '商品描述')->rules('required');
+            $form->radio('on_sale', '上架')->options(['1' => '是', '0' => '否'])->default('0');
 
-            $form->display('id', 'ID');
+            $form->hasMany('skus', 'Skus', function (Form\NestedForm $form) {
+                $form->text('title', 'SKU名称')->rules('required');
+                $form->text('description', 'SKU描述')->rules('required');
+                $form->text('price', '单价')->rules('required|numeric|min:0.01');
+                $form->text('stock', '剩余库存')->rules('required|integer|min:0');
+            });
 
-            $form->display('created_at', 'Created At');
-            $form->display('updated_at', 'Updated At');
+            //定义事件回调，当模型保存时会触发这个回调
+            $form->saving(function (Form $form) {
+                $form->model()->price = collect($form->input('skus'))->where(Form::REMOVE_FLAG_NAME, 0)->min('price');
+            });
         });
     }
 }

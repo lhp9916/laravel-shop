@@ -68,7 +68,7 @@ return [
      */
     'upload' => [
 
-        'disk' => 'public',
+        'disk' => 'uploads',
 
         'directory' => [
             'image' => 'images',
