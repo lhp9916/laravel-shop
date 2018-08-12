@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\InvalidRequestException;
 use App\Models\Order;
 use Carbon\Carbon;
+use Endroid\QrCode\QrCode;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -55,5 +56,44 @@ class PaymentController extends Controller
         ]);
 
         return app('alipay')->success();
+    }
+
+    public function payByWechat(Order $order, Request $request)
+    {
+        $this->authorize('own', $order);
+        if ($order->paid_at || $order->closed) {
+            throw new InvalidRequestException('订单状态不正确');
+        }
+
+        $wechatOrder = app('wechat_pay')->scan([
+            'out_trade_no' => $order->no,  // 商户订单流水号，与支付宝 out_trade_no 一样
+            'total_fee'    => $order->total_amount * 100, // 与支付宝不同，微信支付的金额单位是分。
+            'body'         => '支付 Laravel Shop 的订单：' . $order->no, // 订单描述
+        ]);
+
+        $qrCode = new QrCode($wechatOrder->code_url);
+
+        return response($qrCode->writeString(), 200, ['Content-Type' => $qrCode->getContentType()]);
+    }
+
+    //微信的扫码支付没有前端回调只有服务器端回调
+    public function wechatNotify()
+    {
+        $data = app('wechat_pay')->verify();
+        $order = Order::query()->where('no', $data->out_trade_no)->first();
+        if (!$order) {
+            return 'fail';
+        }
+        if ($order->paid_at) {
+            return app('wechat_pay')->success();
+        }
+
+        $order->update([
+            'paid_at'        => Carbon::now(), // 支付时间
+            'payment_method' => 'wechat', // 支付方式
+            'payment_no'     => $data->transaction_id,
+        ]);
+
+        return app('wechat_pay')->success();
     }
 }
