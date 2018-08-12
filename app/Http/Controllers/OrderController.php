@@ -8,6 +8,7 @@ use App\Jobs\CloseOrder;
 use App\Models\Order;
 use App\Models\ProductSku;
 use App\Models\UserAddress;
+use App\Services\CartService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -28,10 +29,10 @@ class OrderController extends Controller
         return view('orders.show', ['order' => $order->load(['items.productSku', 'items.product'])]);
     }
 
-    public function store(OrderRequest $request)
+    public function store(OrderRequest $request, CartService $cartService)
     {
         $user = $request->user();
-        $order = \DB::transaction(function () use ($user, $request) {
+        $order = \DB::transaction(function () use ($user, $request, $cartService) {
             $address = UserAddress::query()->find($request->input('address_id'));
             $address->update(['last_used_at' => Carbon::now()]);
             $order = new Order([
@@ -69,7 +70,7 @@ class OrderController extends Controller
 
             //将下单的商品从购物车中移除
             $skuIds = collect($request->input('items'))->pluck('sku_id');
-            $user->cartItems()->whereIn('product_sku_id', $skuIds)->delete();
+            $cartService->remove($skuIds);
 
             return $order;
         });
