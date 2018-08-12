@@ -49,12 +49,23 @@ class OrderController extends Controller
             $grid->actions(function ($actions) {
                 $actions->disableDelete();
                 $actions->disableEdit();
+                $actions->append('<a href="' . route('admin.orders.show', ['order' => $actions->getKey()]) . '"><i class="fa fa-eye"></i></a>');
             });
             $grid->tools(function ($tools) {
                 $tools->batch(function ($batch) {
                     $batch->disableDelete();
                 });
             });
+        });
+    }
+
+    public function show(Order $order)
+    {
+        //使用自定义页面展示订单详情
+        return Admin::content(function (Content $content) use ($order) {
+            $content->header('查看详情');
+            // body 方法可以接受视图作为参数
+            $content->body(view('admin.orders.show', ['order' => $order]));
         });
     }
 
