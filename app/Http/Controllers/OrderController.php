@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\InternalException;
 use App\Http\Requests\OrderRequest;
-use App\Jobs\CloseOrder;
 use App\Models\Order;
-use App\Models\ProductSku;
 use App\Models\UserAddress;
-use App\Services\CartService;
-use Carbon\Carbon;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -29,54 +25,13 @@ class OrderController extends Controller
         return view('orders.show', ['order' => $order->load(['items.productSku', 'items.product'])]);
     }
 
-    public function store(OrderRequest $request, CartService $cartService)
+    public function store(OrderRequest $request, OrderService $orderService)
     {
         $user = $request->user();
-        $order = \DB::transaction(function () use ($user, $request, $cartService) {
-            $address = UserAddress::query()->find($request->input('address_id'));
-            $address->update(['last_used_at' => Carbon::now()]);
-            $order = new Order([
-                'address'      => [ // 将地址信息放入订单中
-                    'address'       => $address->full_address,
-                    'zip'           => $address->zip,
-                    'contact_name'  => $address->contact_name,
-                    'contact_phone' => $address->contact_phone,
-                ],
-                'remark'       => $request->input('remark'),
-                'total_amount' => 0,
-            ]);
-            $order->user()->associate($user);
-            $order->save();
+        $address = UserAddress::query()->find($request->input('address_id'));
+        $remark = $request->input('remark');
+        $items = $request->input('items');
 
-            $totalAmount = 0;
-            $items = $request->input('items');
-            foreach ($items as $data) {
-                $sku = ProductSku::find($data['sku_id']);
-                $item = $order->items()->make([
-                    'amount' => $data['amount'],
-                    'price'  => $sku->price,
-                ]);
-                $item->product()->associate($sku->product_id);
-                $item->productSku()->associate($sku);
-                $item->save();
-                $totalAmount += $sku->price * $data['amount'];
-                if ($sku->decreaseStock($data['amount']) <= 0) {
-                    throw new InternalException('该商品库存不足');
-                }
-            }
-
-            //更新订单总金额
-            $order->update(['total_amount' => $totalAmount]);
-
-            //将下单的商品从购物车中移除
-            $skuIds = collect($request->input('items'))->pluck('sku_id');
-            $cartService->remove($skuIds);
-
-            return $order;
-        });
-
-        $this->dispatch(new CloseOrder($order, config('app.order_ttl')));
-
-        return $order;
+        return $orderService->store($user, $address, $remark, $items);
     }
 }
