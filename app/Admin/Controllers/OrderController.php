@@ -109,7 +109,7 @@ class OrderController extends Controller
             throw new InvalidRequestException('订单状态不对');
         }
         if ($request->input('agree')) {
-            //todo
+            $this->_refundOrder($order);
         } else {
             $extra = $order->extra ?: [];
             $extra['refund_disagree_reason'] = $request->input('reason');
@@ -119,6 +119,42 @@ class OrderController extends Controller
             ]);
         }
         return $order;
+    }
+
+    protected function _refundOrder(Order $order)
+    {
+        switch ($order->payment_method) {
+            case 'wechat':
+                //todo
+                break;
+            case 'alipay':
+                $refundNO = Order::getAvailableRefundNo();
+                $ret = app('alipay')->refund([
+                    'out_trade_no'   => $order->no,
+                    'refund_amount'  => $order->total_amount,
+                    'out_request_no' => $refundNO,
+                ]);
+                //根据支付宝的文档，如果返回值里有 sub_code 字段说明退款失败
+                if ($ret->sub_code) {
+                    $extra = $order->extra;
+                    $extra['refund_failed_code'] = $ret->sub_code;
+                    //将订单改为退款失败
+                    $order->update([
+                        'refund_no'     => $refundNO,
+                        'refund_status' => Order::REFUND_STATUS_FAILED,
+                        'extra'         => $extra,
+                    ]);
+                } else {
+                    $order->update([
+                        'refund_no'     => $refundNO,
+                        'refund_status' => Order::REFUND_STATUS_SUCCESS,
+                    ]);
+                }
+                break;
+            default:
+                throw new InvalidRequestException('未知订单方式：' . $order->payment_method);
+                break;
+        }
     }
 
 }
