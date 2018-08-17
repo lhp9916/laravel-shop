@@ -21,7 +21,7 @@ class CreateCouponCodesTable extends Migration
             $table->decimal('value');
             $table->unsignedInteger('total');
             $table->unsignedInteger('used')->dafault(0);
-            $table->decimal('min_count', 10, 2);
+            $table->decimal('min_amount', 10, 2);
             $table->dateTime('not_before')->nullable();
             $table->dateTime('not_after')->nullable();
             $table->boolean('enabled');

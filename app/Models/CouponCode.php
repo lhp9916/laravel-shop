@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class CouponCode extends Model
 {
@@ -32,5 +33,32 @@ class CouponCode extends Model
     ];
 
     protected $dates = ['not_before', 'not_after'];
+
+    public static function findAvailableCode($length = 16)
+    {
+        do {
+            // 生成一个指定长度的随机字符串，并转成大写
+            $code = strtoupper(Str::random($length));
+            // 如果生成的码已存在就继续循环
+        } while (self::query()->where('code', $code)->exists());
+
+        return $code;
+    }
+
+    protected $appends = ['description'];
+
+    public function getDescriptionAttribute()
+    {
+        $str = '';
+
+        if ($this->min_amount > 0) {
+            $str = '满' . str_replace('.00', '', $this->min_amount);
+        }
+        if ($this->type === self::TYPE_PERCENT) {
+            return $str . '优惠' . str_replace('.00', '', $this->value) . '%';
+        }
+
+        return $str . '减' . str_replace('.00', '', $this->value);
+    }
 
 }
