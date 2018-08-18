@@ -17,7 +17,7 @@ class OrderService
     public function store(User $user, UserAddress $address, $remark, $items, CouponCode $coupon = null)
     {
         if ($coupon) {
-            $coupon->checkAvailable();
+            $coupon->checkAvailable($user);
         }
         $order = \DB::transaction(function () use ($user, $address, $remark, $items, $coupon) {
             $address->update(['last_used_at' => Carbon::now()]);
@@ -51,7 +51,7 @@ class OrderService
             }
 
             if ($coupon) {
-                $coupon->checkAvailable($totalAmount);
+                $coupon->checkAvailable($user, $totalAmount);
                 //把订单金额修改为优惠后的金额
                 $totalAmount = $coupon->getAdjustedPrice($totalAmount);
                 //把订单与优惠券关联
