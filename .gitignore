@@ -15,3 +15,5 @@ public/js
 public/mix-manifest.json
 public/fonts
 public/uploads
+.phpstorm.meta.php
+_ide_helper.php
