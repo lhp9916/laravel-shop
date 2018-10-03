@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.21, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.22, for Linux (x86_64)
 --
--- Host: localhost    Database: lv-shop
+-- Host: 127.0.0.1    Database: lv-shop
 -- ------------------------------------------------------
--- Server version	5.7.21-0ubuntu0.16.04.1
+-- Server version	5.7.22-0ubuntu18.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -21,7 +21,7 @@
 
 LOCK TABLES `admin_menu` WRITE;
 /*!40000 ALTER TABLE `admin_menu` DISABLE KEYS */;
-INSERT INTO `admin_menu` VALUES (1,0,1,'首页','fa-bar-chart','/',NULL,'2018-07-19 22:39:35'),(2,0,6,'系统管理','fa-tasks',NULL,NULL,'2018-08-17 22:48:06'),(3,2,7,'管理员','fa-users','auth/users',NULL,'2018-08-17 22:48:06'),(4,2,8,'角色','fa-user','auth/roles',NULL,'2018-08-17 22:48:06'),(5,2,9,'权限','fa-ban','auth/permissions',NULL,'2018-08-17 22:48:06'),(6,2,10,'菜单','fa-bars','auth/menu',NULL,'2018-08-17 22:48:06'),(7,2,11,'操作日志','fa-history','auth/logs',NULL,'2018-08-17 22:48:06'),(8,0,2,'用户管理','fa-users','/users','2018-07-21 10:13:21','2018-08-17 22:48:06'),(9,0,3,'商品管理','fa-cubes','/products','2018-07-21 11:20:47','2018-08-17 22:48:06'),(10,0,4,'订单管理','fa-rmb','/orders','2018-08-12 18:12:13','2018-08-17 22:48:06'),(11,0,5,'优惠券管理','fa-tags','/coupon_codes','2018-08-17 22:47:33','2018-08-17 22:48:06');
+INSERT INTO `admin_menu` VALUES (1,0,1,'首页','fa-bar-chart','/',NULL,'2018-07-19 22:39:35'),(2,0,7,'系统管理','fa-tasks',NULL,NULL,'2018-10-03 21:57:24'),(3,2,8,'管理员','fa-users','auth/users',NULL,'2018-10-03 21:57:24'),(4,2,9,'角色','fa-user','auth/roles',NULL,'2018-10-03 21:57:24'),(5,2,10,'权限','fa-ban','auth/permissions',NULL,'2018-10-03 21:57:24'),(6,2,11,'菜单','fa-bars','auth/menu',NULL,'2018-10-03 21:57:24'),(7,2,12,'操作日志','fa-history','auth/logs',NULL,'2018-10-03 21:57:24'),(8,0,2,'用户管理','fa-users','/users','2018-07-21 10:13:21','2018-08-17 22:48:06'),(9,0,4,'商品管理','fa-cubes','/products','2018-07-21 11:20:47','2018-10-03 21:57:24'),(10,0,5,'订单管理','fa-rmb','/orders','2018-08-12 18:12:13','2018-10-03 21:57:24'),(11,0,6,'优惠券管理','fa-tags','/coupon_codes','2018-08-17 22:47:33','2018-10-03 21:57:24'),(12,0,3,'类目管理','fa-bars','/categories','2018-10-03 21:57:08','2018-10-03 21:57:24');
 /*!40000 ALTER TABLE `admin_menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -90,7 +90,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `admin_users` WRITE;
 /*!40000 ALTER TABLE `admin_users` DISABLE KEYS */;
-INSERT INTO `admin_users` VALUES (1,'admin','$2y$10$fjnP7BvFe5cfULGsslC.ZOjIPRWX6y0xNzwi6uWQTlylFvTmE2IZC','Administrator',NULL,'WCOefnSwxugin8RC7c6NiEpHGDAfxRfJwIqYGYFQrOKZz4SjPs6SfxPyjG2E','2018-07-19 22:17:44','2018-07-19 22:17:44'),(2,'operator','$2y$10$W5QJYK/HCBfA3iUUfgoAze56XS2vR6nj3pTSYbacT91hbxwaq2NjC','运营',NULL,NULL,'2018-07-21 10:26:17','2018-07-21 10:26:17');
+INSERT INTO `admin_users` VALUES (1,'admin','$2y$10$fjnP7BvFe5cfULGsslC.ZOjIPRWX6y0xNzwi6uWQTlylFvTmE2IZC','Administrator',NULL,'joonLkbA7aivtBoIVBbUnH1FRN97XHOnTw2UCAg5jD2CQwbvdBXlMm11aKwy','2018-07-19 22:17:44','2018-07-19 22:17:44'),(2,'operator','$2y$10$W5QJYK/HCBfA3iUUfgoAze56XS2vR6nj3pTSYbacT91hbxwaq2NjC','运营',NULL,NULL,'2018-07-21 10:26:17','2018-07-21 10:26:17');
 /*!40000 ALTER TABLE `admin_users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -103,4 +103,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-18  5:43:47
+-- Dump completed on 2018-10-03 14:10:13
