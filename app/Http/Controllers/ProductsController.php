@@ -7,10 +7,11 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Services\CategoryService;
 
 class ProductsController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, CategoryService $categoryService)
     {
         $builder = Product::query()->where('on_sale', true);
         // search 参数用来模糊搜索商品
@@ -59,6 +60,7 @@ class ProductsController extends Controller
                 'order'  => $order,
             ],
             'category' => $category ?? null,
+            'categoryTree' => $categoryService->getCategoryTree(),
         ]);
     }
 
