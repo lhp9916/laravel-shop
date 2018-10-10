@@ -14,6 +14,8 @@ use App\Models\UserAddress;
 use App\Services\OrderService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Http\Requests\CrowdFundingOrderRequest;
+use App\Models\ProductSku;
 
 class OrderController extends Controller
 {
@@ -114,5 +116,16 @@ class OrderController extends Controller
             'extra'         => $extra,
         ]);
         return $order;
+    }
+
+    public function crowdFunding(CrowdFundingOrderRequest $request,OrderService $orderService)
+    {
+        $user = $request->user();
+        $sku = ProductSku::find($request->input('sku_id'));
+        $address = UserAddress::find($request->input('address_id'));
+        $amount  = $request->input('amount');
+
+        return $orderService->crowdFunding($user, $address, $sku,$amount);
+
     }
 }
