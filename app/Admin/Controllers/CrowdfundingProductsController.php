@@ -2,15 +2,12 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\CrowdfundingProduct;
 use App\Models\Product;
-use App\Http\Controllers\Controller;
-use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
-use App\Models\CrowdfundingProduct;
-use App\Models\Category;
 
 class CrowdfundingProductsController extends CommonProductsController
 {
@@ -24,7 +21,7 @@ class CrowdfundingProductsController extends CommonProductsController
         $grid->id('ID')->sortable();
         $grid->title('商品名称');
         $grid->on_sale('已上架')->dispaly(function ($value) {
-            return $value? '是' : '否';
+            return $value ? '是' : '否';
         });
         $grid->price('价格');
         // 展示众筹相关字段

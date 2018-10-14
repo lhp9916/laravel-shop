@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Layout\Content;
 use App\Models\Product;
@@ -17,22 +19,22 @@ abstract class CommonProductsController extends Controller
     public function index(Content $content)
     {
         return $content
-        ->header(Product::$typeMap[$this->getProductType()].'列表')
-        ->body($this->grid());
+            ->header(Product::$typeMap[$this->getProductType()] . '列表')
+            ->body($this->grid());
     }
 
     public function edit($id, Content $content)
     {
         return $content
-        ->header('编辑'.Product::$typeMap[$this->getProductType()])
-        ->body($this->form()->edit($id));
+            ->header('编辑' . Product::$typeMap[$this->getProductType()])
+            ->body($this->form()->edit($id));
     }
 
     public function create(Content $content)
     {
         return $content
-        ->header('创建'.Product::$typeMap[$this->getProductType()])
-        ->body($this->form());
+            ->header('创建' . Product::$typeMap[$this->getProductType()])
+            ->body($this->form());
     }
 
     protected function grid()
@@ -79,7 +81,7 @@ abstract class CommonProductsController extends Controller
         $form->editor('description', '商品描述')->rules('required');
         $form->radio('on_sale', '上架')->options(['1' => '是', '0' => '否'])->default('0');
 
-        $this->customForm();
+        $this->customForm($form);
 
         $form->hasMany('skus', 'Skus', function (Form\NestedForm $form) {
             $form->text('title', 'SKU名称')->rules('required');
