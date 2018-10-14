@@ -71,7 +71,6 @@ class OrderController extends Controller
             throw new InvalidRequestException('该订单未支付，不可评价');
         }
         return view('orders.review', ['order' => $order->load(['items.product', 'items.productSku'])]);
-
     }
 
     public function sendReview(Order $order, SendReviewRequest $request)
@@ -105,6 +104,9 @@ class OrderController extends Controller
         if (!$order->paid_at) {
             throw new InvalidRequestException('该订单未支付,不可退款');
         }
+        if ($order->type === Order::TYPE_CROWDFUNDING) {
+            throw new InvalidRequestException('众筹订单不支持退款');
+        }
         if ($order->refund_status !== Order::REFUND_STATUS_PENDING) {
             throw new InvalidRequestException('该订单已经申请过退款，请勿重复申请');
         }
@@ -118,14 +120,13 @@ class OrderController extends Controller
         return $order;
     }
 
-    public function crowdFunding(CrowdFundingOrderRequest $request,OrderService $orderService)
+    public function crowdFunding(CrowdFundingOrderRequest $request, OrderService $orderService)
     {
         $user = $request->user();
         $sku = ProductSku::find($request->input('sku_id'));
         $address = UserAddress::find($request->input('address_id'));
         $amount  = $request->input('amount');
 
-        return $orderService->crowdFunding($user, $address, $sku,$amount);
-
+        return $orderService->crowdFunding($user, $address, $sku, $amount);
     }
 }
