@@ -60,6 +60,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('payment/{order}/wechat', 'PaymentController@payByWechat')->name('payment.wechat');
         Route::post('payment/wechat/refund_notify', 'PaymentController@wechatRefundNotify')->name('payment.wechat.refund_notify');
 
+        // 分期付款
+        Route::post('payment/{order}/installment', 'PaymentController@payByInstallment')->name('payment.installment');
+
         //优惠券
         Route::get('coupon_codes/{code}', 'CouponCodesController@show')->name('coupon_codes.show');
     });

@@ -8,6 +8,8 @@ use App\Models\Order;
 use Carbon\Carbon;
 use Endroid\QrCode\QrCode;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Models\Installment;
 
 class PaymentController extends Controller
 {
@@ -133,5 +135,51 @@ class PaymentController extends Controller
     protected function afterPaid(Order $order)
     {
         event(new OrderPaid($order));
+    }
+
+    public function payByInstallment(Order $order, Request $request)
+    {
+        $this->authorize('own', $order);
+        if ($order->paid_at || $order->closed) {
+            throw new InvalidRequestException('订单状态不对');
+        }
+        $this->validate($request, [
+            'count'=>['required',Rule::in(array_keys(config('app.installment_fee_rate')))],
+        ]);
+        //删除同一笔订单发起的其他分期
+        Installment::query()
+        ->where('order_id', $order->id)
+        ->where('status', Installment::STATUS_PENDING)
+        ->delete();
+        $count = $request->input('count');
+        $installment = new Installment([
+            'total_amount' => $order->total_amount,
+            'count' => $count,
+            'fee_rate' => config('app.installment_fee_rate')[$count],
+            'fine_rate' => config('app.installment_fine_rate'),
+        ]);
+        $installment->user()->associate($request->user());
+        $installment->order()->associate($order);
+        $installment->save();
+        // 第一期的还款截止日期为明天凌晨 0 点
+        $dueDate = Carbon::tomorrow();
+        $base = big_number($order->total_amount)->divide($count)->getValue();
+        $fee = big_number($base)->multiply($installment->fee_rate)->divide(100)->getValue();
+        for ($i = 0; $i < $count; $i++) {
+            // 最后一期的本金需要用总本金减去前面几期的本金
+            if ($i === $count - 1) {
+                $base = big_number($order->total_amount)->subtract(big_number($base)->multiply($count - 1));
+            }
+            $installment->items()->create([
+                'sequence' => $i,
+                'base'     => $base,
+                'fee'      => $fee,
+                'due_date' => $dueDate,
+            ]);
+            // 还款截止日期加 30 天
+            $dueDate = $dueDate->copy()->addDays(30);
+        }
+
+        return $installment;
     }
 }
