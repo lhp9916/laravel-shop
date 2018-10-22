@@ -113,7 +113,7 @@ body {
             font-weight: bold;
           }
 
-          &>div {
+          & > div {
             &:first-child {
               border-right: 1px solid #eee;
             }
@@ -156,7 +156,7 @@ body {
     font-size: 12px;
     margin-bottom: 10px;
 
-    &>.row {
+    & > .row {
       border-bottom: 1px solid #eee;
 
       .filter-key {
@@ -232,7 +232,7 @@ body {
     flex-direction: row;
     font-size: 12px;
 
-    &>div {
+    & > div {
 
       &.sold_count,
       &.review_count {
@@ -251,7 +251,7 @@ body {
   }
 
   .skus {
-    &>label {
+    & > label {
       color: #999;
       font-size: 12px;
       padding: 0 10px 0 10px;
@@ -309,7 +309,7 @@ body {
   }
 
   .product-detail {
-    .nav.nav-tabs>li>a {
+    .nav.nav-tabs > li > a {
       border-radius: 0 !important;
     }
 
@@ -447,7 +447,7 @@ body {
         display: block;
       }
 
-      .product-title>a {
+      .product-title > a {
         color: #3c3c3c;
       }
 
@@ -488,7 +488,7 @@ body {
       display: block;
     }
 
-    .product-title>a {
+    .product-title > a {
       color: #3c3c3c;
     }
 
@@ -579,7 +579,7 @@ body {
       display: block;
     }
 
-    .product-title>a {
+    .product-title > a {
       color: #3c3c3c;
     }
 
@@ -605,13 +605,13 @@ body {
     padding: 0;
 
     &:not(:checked) {
-      &>input {
+      & > input {
         position: absolute;
         top: -9999px;
         clip: rect(0, 0, 0, 0);
       }
 
-      &>label {
+      & > label {
         float: right;
         width: 1em;
         overflow: hidden;
@@ -626,27 +626,27 @@ body {
         }
       }
 
-      &>label:hover,
-      &>label:hover~label {
+      & > label:hover,
+      & > label:hover ~ label {
         color: gold;
       }
     }
 
-    &>input:checked~label {
+    & > input:checked ~ label {
       color: gold;
     }
 
-    &>label:active {
+    & > label:active {
       position: relative;
       top: 2px;
       left: 2px;
     }
 
-    &>input:checked+label:hover,
-    &>input:checked+label:hover~label,
-    &>input:checked~label:hover,
-    &>input:checked~label:hover~label,
-    &>label:hover~input:checked~label {
+    & > input:checked + label:hover,
+    & > input:checked + label:hover ~ label,
+    & > input:checked ~ label:hover,
+    & > input:checked ~ label:hover ~ label,
+    & > label:hover ~ input:checked ~ label {
       color: gold;
     }
   }
@@ -659,7 +659,7 @@ body {
 .dropdown-submenu {
   position: relative;
 
-  &>.dropdown-menu {
+  & > .dropdown-menu {
     top: 0;
     left: 100%;
     margin-top: -6px;
@@ -667,11 +667,11 @@ body {
     border-radius: 0 6px 6px 6px;
   }
 
-  &:hover>.dropdown-menu {
+  &:hover > .dropdown-menu {
     display: block;
   }
 
-  &>a:after {
+  & > a:after {
     display: block;
     content: " ";
     float: right;
@@ -685,17 +685,76 @@ body {
     margin-right: -10px;
   }
 
-  &:hover>a:after {
+  &:hover > a:after {
     border-left-color: #fff;
   }
 
   &.pull-left {
     float: none;
 
-    &>.dropdown-menu {
+    & > .dropdown-menu {
       left: -100%;
       margin-left: 10px;
       border-radius: 6px 0 6px 6px;
     }
+  }
+}
+
+.installments-show-page {
+  font-size: 12px;
+  .table {
+    margin-bottom: 0;
+    .repaid {
+      color: green;
+    }
+    .overdue {
+      color: red;
+    }
+  }
+  .item-amount {
+    padding-right: 20px;
+    width: 200px;
+  }
+  .installment-top {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+  }
+  .installment-info {
+    width: 50%;
+    .line {
+      display: flex;
+      flex-direction: row;
+      .line-label {
+        width: 80px;
+        text-align: right;
+      }
+      .line-value {
+        padding-left: 20px;
+        flex-shrink: 100;
+      }
+    }
+    border-right: 1px solid #ddd;
+  }
+  .installment-next {
+    width: 50%;
+    font-family: Verdana, Tahoma, Helvetica, Arial;
+    .installment-clear {
+      font-weight: bolder;
+      font-size: 16px;
+    }
+    .total-amount {
+      font-weight: bolder;
+      font-size: 14px;
+    }
+    .value {
+      display: inline-block;
+      width: 150px;
+      padding-right: 20px;
+    }
+  }
+  .payment-buttons {
+    margin-top: 10px;
+    padding-right: 10px;
   }
 }

@@ -257,8 +257,7 @@
             $('.btn-select-installment').click(function () {
                 axios.post('{{ route('payment.installment', ['order'=>$order->id]) }}', {count: $(this).data('count')})
                     .then(function (response) {
-                        console.log(response.data)
-                        //todo 跳转到分期付款页面
+                        location.href = '/installments/' + response.data.id;
                     })
             });
 
