@@ -14,4 +14,14 @@ class InstallmentsController extends Controller
             ->paginate(10);
         return view('installments.index', compact('installments'));
     }
+
+    public function show(Installment $installment)
+    {
+        $items = $installment->items()->orderBy('sequence')->get();
+        return view('installments.show', [
+            'installment' => $installment,
+            'items' => $items,
+            'nextItem' => $items->where('paid_at', null)->first(),
+        ]);
+    }
 }
