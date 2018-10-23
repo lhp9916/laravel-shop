@@ -70,6 +70,7 @@ abstract class CommonProductsController extends Controller
         $form->hidden('type')->value($this->getProductType());
         // 创建一个输入框，第一个参数 title 是模型的字段名，第二个参数是该字段描述
         $form->text('title', '商品名称')->rules('required');
+        $form->text('long_title', '商品长标题')->rules('required');
         $form->select('category_id', '类目')->options(function ($id) {
             $category = Category::find($id);
             if ($category) {
@@ -88,6 +89,11 @@ abstract class CommonProductsController extends Controller
             $form->text('description', 'SKU描述')->rules('required');
             $form->text('price', '单价')->rules('required|numeric|min:0.01');
             $form->text('stock', '剩余库存')->rules('required|integer|min:0');
+        });
+
+        $form->hasMany('properties', '商品属性', function (Form\NestedForm $form) {
+            $form->text('name', '属性名')->rules('required');
+            $form->text('value', '属性值')->rules('required');
         });
 
         //定义事件回调，当模型保存时会触发这个回调

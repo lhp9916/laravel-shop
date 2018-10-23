@@ -14,7 +14,7 @@ class Product extends Model
         self::TYPE_CROWDFUNDING => '众筹商品',
     ];
     protected $fillable = [
-        'title', 'description', 'image', 'on_sale', 'rating', 'sold_count', 'review_count', 'price', 'type'
+        'title', 'long_title', 'description', 'image', 'on_sale', 'rating', 'sold_count', 'review_count', 'price', 'type'
     ];
 
     protected $casts = [
@@ -43,5 +43,10 @@ class Product extends Model
     public function crowdfunding()
     {
         return $this->hasOne(CrowdfundingProduct::class);
+    }
+
+    public function properties()
+    {
+        return $this->hasMany(ProductProperty::class);
     }
 }
