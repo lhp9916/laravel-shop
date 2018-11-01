@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SeckillProduct extends Model
 {
-    public $atstamps = false;
+    public $timestamps = false;
     protected $fillable = ['start_at', 'end_at'];
     protected $dates = ['start_at', 'end_at'];
 
