@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use Monolog\Logger;
 use Yansongda\Pay\Pay;
 use Carbon\Carbon;
@@ -20,6 +21,13 @@ class AppServiceProvider extends ServiceProvider
         \View::composer(['products.index','products.show'], \App\Http\ViewComposers\CategoryTreeComposer::class);
         
         Carbon::setLocale('zh');
+
+        // 只在本地开发环境启用 SQL 日志
+        if (app()->environment('local')) {
+            \DB::listen(function ($query) {
+                \Log::info(Str::replaceArray('?', $query->bindings, $query->sql));
+            });
+        }
     }
 
     /**
