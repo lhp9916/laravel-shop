@@ -54,6 +54,9 @@ Route::group(['middleware' => 'auth'], function () {
         // 众筹
         Route::post('crowdfunding_orders', 'OrderController@crowdfunding')->name('crowdfunding_orders.store');
 
+        // 秒杀
+        Route::post('seckill_orders', 'OrderController@seckill')->name('seckill_orders.store');
+
         //支付
         Route::get('payment/{order}/alipay', 'PaymentController@payByAlipay')->name('payment.alipay');
         Route::get('payment/alipay/return', 'PaymentController@alipayReturn')->name('payment.alipay.return');

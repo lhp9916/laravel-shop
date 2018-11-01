@@ -15,12 +15,12 @@ class SeckillProduct extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function getIsBeforeStartArAttribute()
+    public function getIsBeforeStartAttribute()
     {
         return now()->lt($this->start_at);
     }
 
-    public function getIsAfterEndAtAttribute()
+    public function getIsAfterEndAttribute()
     {
         return now()->gt($this->end_at);
     }
