@@ -218,6 +218,8 @@ class OrderService
         // 秒杀订单的自动关闭时间与普通订单不同
         dispatch(new CloseOrder($order, config('app.seckill_order_ttl')));
 
+        \Redis::decr('seckill_sku_'.$sku->id);
+
         return $order;
     }
 }
