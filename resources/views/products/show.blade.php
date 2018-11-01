@@ -109,11 +109,14 @@
                     </div>
                     <div class="product-detail">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active"><a href="#product-detail-tab"
-                                                                      aria-controls="product-detail-tab" role="tab"
-                                                                      data-toggle="tab">商品详情</a></li>
-                            <li role="presentation"><a href="#product-reviews-tab" aria-controls="product-reviews-tab"
-                                                       role="tab" data-toggle="tab">用户评价</a></li>
+                            <li role="presentation" class="active">
+                                <a href="#product-detail-tab" aria-controls="product-detail-tab" role="tab"
+                                   data-toggle="tab">商品详情</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#product-reviews-tab" aria-controls="product-reviews-tab" role="tab"
+                                   data-toggle="tab">用户评价</a>
+                            </li>
                         </ul>
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="product-detail-tab">
@@ -158,6 +161,34 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- 猜你喜欢开始 -->
+                    @if(count($similar) > 0)
+                        <div class="similar-products">
+                            <div class="title">猜你喜欢</div>
+                            <div class="row products-list">
+                                @foreach($similar as $product)
+                                    <div class="col-xs-3 product-item">
+                                        <div class="product-content">
+                                            <div class="top">
+                                                <div class="img">
+                                                    <a href="{{ route('products.show', ['product' => $product->id]) }}">
+                                                        <img src="{{ $product->image_url }}" alt="">
+                                                    </a>
+                                                </div>
+                                                <div class="price"><b>￥</b>{{ $product->price }}</div>
+                                                <div class="title">
+                                                    <a href="{{ route('products.show', ['product' => $product->id]) }}">{{ $product->title }}</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                    <!-- 猜你喜欢结束 -->
+
                 </div>
             </div>
         </div>
