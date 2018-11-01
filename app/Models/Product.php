@@ -9,9 +9,11 @@ class Product extends Model
 {
     const TYPE_NORMAL = 'normal';
     const TYPE_CROWDFUNDING = 'crowdfunding';
+    const TYPE_SECKILL = 'seckill';
     public static $typeMap = [
         self::TYPE_NORMAL       => '普通商品',
         self::TYPE_CROWDFUNDING => '众筹商品',
+        self::TYPE_SECKILL      => '秒杀商品',
     ];
     protected $fillable = [
         'title', 'long_title', 'description', 'image', 'on_sale', 'rating', 'sold_count', 'review_count', 'price', 'type',
@@ -43,6 +45,11 @@ class Product extends Model
     public function crowdfunding()
     {
         return $this->hasOne(CrowdfundingProduct::class);
+    }
+
+    public function seckill()
+    {
+        return $this->hasOne(SeckillProduct::class);
     }
 
     public function properties()
@@ -90,7 +97,7 @@ class Product extends Model
         $arr['properties'] = $this->properties->map(function (ProductProperty $property) {
             // 对应地增加一个 search_value 字段，用符号 : 将属性名和属性值拼接起来
             return array_merge(array_only($property->toArray(), ['name', 'value']), [
-                'search_value' => $property->name.':'.$property->value,
+                'search_value' => $property->name . ':' . $property->value,
             ]);
         });
 
