@@ -11,7 +11,7 @@
 |
 */
 // 秒杀
-Route::post('seckill_orders', 'OrderController@seckill')->name('seckill_orders.store');
+Route::post('seckill_orders', 'OrderController@seckill')->name('seckill_orders.store')->middleware('random_drop:80');
 Route::redirect('/', '/products')->name('root');
 Route::get('products', 'ProductsController@index')->name('products.index');
 
